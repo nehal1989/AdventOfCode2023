@@ -57,5 +57,48 @@ for play in processed_input:
 print(f"The sum of game IDs that are possible is {game_possible_count}")
 
 
+# Part 2
+
+game_id_possible_list = []
+game_possible_count = 0
+for play in processed_input:
+    split_items = play.split(": ")
+    game_id = int(split_items[0].split(" ")[1])
+
+    split_delimiters = r"; "
+    rounds = re.split(split_delimiters, split_items[1])
+
+    round_status = []
+    # maximum color value
+    green_count = 0
+    red_count = 0
+    blue_count = 0
+
+    for single_round in rounds:
+
+        outcomes = single_round.split(", ")
+        for item in outcomes:
+            value, colour = tuple(item.split(" "))
+            value = int(value)
+            if colour == "red":
+                if value > red_count:
+                    red_count = value
+            elif colour == "green":
+                if value > green_count:
+                    green_count = value
+            else:
+                if value > blue_count:
+                    blue_count = value
+
+        # check if game was possible
+        if red_count > max_red or green_count > max_green or blue_count > max_blue:
+            round_status.append(False) # game was impossible
+        else:
+            round_status.append(True) # game was possible
+
+    game_power = red_count * green_count * blue_count
+    game_possible_count += game_power
+
+print(f"The sum of colour powers is {game_possible_count}")
 
 
